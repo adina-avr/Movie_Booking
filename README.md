@@ -7,8 +7,8 @@ Application under test: Rezervare filme
 Tools used: MySQL Workbench
 
 Database description: Proiectul propus se referă la o aplicație de rezervare de filme, având ca scop gestionarea utilizatorilor, filmelor, sălilor de cinema, rezervărilor și programărilor. Baza de date va conține următoarele tabele:
-1.	Users - Informații despre utilizatori
-2.	Movies - Detalii despre filme
+1.	Movies - Detalii despre filme
+2.	Customers – Detalii despre clienti
 3.	Cinemas - Informații despre cinematografe
 4.	Showtimes - Programările filmelor în diferite cinematografe
 5.	Bookings - Rezervările efectuate de utilizatori pentru filme
@@ -16,38 +16,17 @@ Database description: Proiectul propus se referă la o aplicație de rezervare d
 
 Database Schema
 You can find below the database schema that was generated through Reverse Engineer and which contains all the tables and the relationships between them.
-
+ 
 The tables are connected in the following way:
 
-1. Movies
-•	movie_id (Primary Key)
-•	title
-•	director
-•	genre
-•	release_year
-
-2. Customers
-•	customer_id (Primary Key)
-•	email
-•	phone_number
-
-3. Cinemas
-•	cinema_id (Primary Key)
-•	cinema_name
-•	location
-
-4.  Showtimes
-•	showtime_id (Primary Key)
-•	movie_id (Foreign Key - legat de Movies.movie_id)
-•	cinema_id (Foreign Key - legat de Cinemas.cinema_id)
-•	showtime
-
-5.  Bookings
-•	booking_id (Primary Key)
-•	customer_id (Foreign Key - legat de Customer.customer_id)
-•	showtime_id (Foreign Key - legat de Showtimes.showtime_id)
-•	seats
-•	total_price
+o	movies.movie_id este cheie primară în tabelul movies.
+o	showtimes.movie_id este cheie secundara în tabelul showtimes, legată de movies.movie_id.
+o	cinemas.cinema_id este cheie primară în tabelul cinemas.
+o	showtimes.cinema_id este cheie secundara în tabelul showtimes, legată de cinemas.cinema_id.
+o	showtimes.showtime_id este cheie primară în tabelul showtimes.
+o	bookings.showtime_id este cheie secundara în tabelul bookings, legată de showtimes.showtime_id.
+o	customers.customer_id este cheie primară în tabelul customers.
+o	bookings.customer_id este cheie secundara în tabelul bookings, legată de customers.customer_id.
 
 Database Queries
 DDL (Data Definition Language)
@@ -64,6 +43,7 @@ DML (Data Manipulation Language)
 In order to be able to use the database I populated the tables with various data necessary in order to perform queries and manipulate the data. In the testing process, this necessary data is identified in the Test Design phase and created in the Test Implementation phase.
 
 Below you can find all the insert instructions that were created in the scope of this project:
+
 insert into Movies 
 insert into Customer 
 insert into Cinemas
@@ -71,14 +51,13 @@ insert into Showtimes
 insert into Bookings
 
 After the testing process, I deleted the data that was no longer relevant in order to preserve the database clean:
+
 DELETE FROM Bookings WHERE booking_id = 1; ( Șterge o rezervare)
 
 DQL (Data Query Language)
 In order to simulate various scenarios that might happen in real life I created the following queries that would cover multiple potential real-life situations:
 
-Inserati aici toate instructiunile de SELECT pe care le-ati scris folosind filtrarile necesare astfel incat sa extrageti doar datele de care aveti nevoie Incercati sa acoperiti urmatoarele:
 Selectează toate filmele - SELECT * FROM Movies;
-
 Selectează toate filmele dintr-un anumit gen - SELECT title, director, release_year FROM Movies WHERE genre = 'Sci-Fi';
 
  Selectează detaliile unei rezervări, incluzând datele clienților și filmele rezervate - SELECT b.booking_id, c.name AS customer_name, m.title AS movie_title, b.seats, b.total_price
@@ -88,13 +67,15 @@ INNER JOIN Showtimes s ON b.showtime_id = s.showtime_id
 INNER JOIN Movies m ON s.movie_id = m.movie_id;
 
  Functii agregate
-Numără câte bilete sunt rezervate per film - SELECT m.title, COUNT(b.booking_id) AS total_bookings
+Numără câte bilete sunt rezervate per film –
+SELECT m.title, COUNT(b.booking_id) AS total_bookings
 FROM Movies m
 INNER JOIN Showtimes s ON m.movie_id = s.movie_id
 INNER JOIN Bookings b ON s.showtime_id = b.showtime_id
 GROUP BY m.title;
 
-Filme cu mai mult de 2 rezervări - SELECT m.title, COUNT(b.booking_id) AS total_bookings
+Filme cu mai mult de 2 rezervări
+ - SELECT m.title, COUNT(b.booking_id) AS total_bookings
 FROM Movies m
 INNER JOIN Showtimes s ON m.movie_id = s.movie_id
 INNER JOIN Bookings b ON s.showtime_id = b.showtime_id
