@@ -171,14 +171,11 @@ WHERE movie_id IN (
     WHERE b.seats_reserved > 3
 );
 
-Relații între Tabele
+Relații între Tabele.
 movies ↔ showtimes: movies.movie_id este cheie primară, iar showtimes.movie_id este cheie secundara.
-
 cinemas ↔ showtimes: cinemas.cinema_id este cheie primară, iar showtimes.cinema_id este cheie secundara.
-
 showtimes ↔ bookings: showtimes.showtime_id este cheie primară, iar bookings.showtime_id este cheie secundara.
-
 customers ↔ bookings: customers.customer_id este cheie primară, iar bookings.customer_id este cheie secundara.
 
-Concluzii
+Concluzii.
 Această bază de date permite gestionarea completă a unui sistem de rezervări pentru filme, cu relații bine definite între tabele și o structură care asigură integritatea datelor. Proiectul oferă suport pentru interogări complexe, filtrări și analize prin utilizarea funcțiilor SQL.-
